@@ -85,7 +85,7 @@ Instalação por `pip` a partir do GitHub, sempre com tag fixa:
 
 ```
 # Sistema-Financeiro/requirements.txt
-tcm-ui           @ git+https://github.com/ErikDeFreitas/Tcm-ui@v1.0.0
+tcm-ui           @ git+https://github.com/ErikDeFreitas/Tcm-ui@v1.1.0
 robo-agregado    @ git+https://github.com/ErikDeFreitas/Send_Agregados@v2.0.0
 mesclador        @ git+https://github.com/ErikDeFreitas/pdf-merge@v3.0.0
 enviador-pdf-xml @ git+https://github.com/ErikDeFreitas/pdf-xml-mailer@v2.0.0
@@ -112,7 +112,9 @@ Conteúdo:
   `Modulo.pasta_dados` (seção 5.6); não existe `tcm_ui.dados`.
 - `tcm_ui.janela` — `JanelaPrincipal` (barra lateral + cabeçalho + páginas), usada pela casca e
   pelo avulso. (Atualizado na implementação do plano 1.)
-- `tcm_ui.avulso` — `rodar_avulso(MODULO)`; `tcm_ui.atualizacao_ui` — `VerificadorAtualizacao`.
+- `tcm_ui.avulso` — `rodar_avulso(MODULO, atualizar=True)`; `tcm_ui.atualizacao_ui` — `VerificadorAtualizacao`.
+- `tcm_ui.registro` — `configurar_log(pasta, nome)`: log rotativo em `<pasta>\logs\<nome>.log` e
+  registro de exceções não tratadas (o `.exe` não tem console). (Plano 2, tcm-ui 1.1.0.)
 
 Regra: **só a casca (ou a janela avulsa) chama `tema.aplicar(app)`**. Módulos nunca chamam
 `setStyleSheet` no `QApplication`.

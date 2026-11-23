@@ -85,7 +85,7 @@ Descartado: carregar módulos baixados em tempo de execução (plugins). Com PyI
 
 ## Controle de acesso
 
-Possível, sim. Quem administra os acessos: **só a TI (Erik)**.
+Possível, sim. Quem administra os acessos: **só a TI**.
 
 ### 0. Grupos do Active Directory local (domínio `TCMSP`) — ESCOLHIDA
 Descoberto em 19/11/2026: as máquinas estão no domínio AD local `TCMSP`, e a TI gerencia os

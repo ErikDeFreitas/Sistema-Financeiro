@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sistema-financeiro"
+dynamic = ["version"]
+description = "Casca do Sistema Financeiro TCM: agrupa os sistemas financeiros numa barra lateral"
+requires-python = ">=3.11"
+dependencies = [
+    "tcm-ui",
+    "pywin32; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-qt"]
+
+[tool.setuptools.dynamic]
+version = {attr = "sistema_financeiro.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,2 @@
+tcm-ui @ git+https://github.com/ErikDeFreitas/Tcm-ui@v1.1.0
+robo-agregado @ git+https://github.com/ErikDeFreitas/Send_Agregados@v2.0.0
