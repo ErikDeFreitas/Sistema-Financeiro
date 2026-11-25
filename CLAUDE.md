@@ -93,7 +93,8 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
   `Projeto_Catraca`, pois a 1.0.0 pode nunca ter sido publicada).
 
 - Plano 8 (login Microsoft padronizado) — spec `docs/superpowers/specs/2026-11-25-login-microsoft-design.md`,
-  plano `docs/superpowers/plans/2026-11-25-plano-8-login-microsoft.md`, **implementado, sem commit**.
+  plano `docs/superpowers/plans/2026-11-25-plano-8-login-microsoft.md`, **implementado, testado pelo Erik
+  e lançado em 25/11/2026**.
   `Tcm-ui` 1.6.0: `tcm_ui.microsoft` (Conta MSAL, cache DPAPI compartilhado em
   `%LOCALAPPDATA%\TCM\ContaMicrosoft`, `TCM_CONTA_MICROSOFT` troca a pasta, `abrir_smtp` XOAUTH2,
   `criar_conta_em_segundo_plano`) e `tcm_ui.microsoft_ui.CartaoContaMicrosoft`; extra `tcm-ui[microsoft]`.
@@ -102,20 +103,19 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
   envio..." com "Enviar como", `.env` migrado e apagado, `ErroSessao` reabre o diálogo; sem internet não
   abre diálogo sozinho (55 testes). Casca 1.5.0 (51 testes, `.exe` verificado). Ledger:
   `.superpowers/sdd/2026-11-25-plano-8-login-microsoft/`.
-  **Antes de salvar**: o Erik testa o `RoboAgregado.exe` novo (login próprio + "Enviar como" a caixa do
-  financeiro, depois que a TI der a permissão "Enviar como") e o `EnviadorEmails.exe` sem entrar de novo.
-  **Ordem do "Salvar versão"**: `Tcm-ui` v1.6.0 (tag) → `pdf-xml-mailer` v2.1.0 → `Send_Agregados` v2.1.0
-  → `Sistema-Financeiro` v1.5.0.
+  Lançado na ordem: `Tcm-ui` v1.6.0 (tag) → Releases `pdf-xml-mailer` v2.1.0 → `Send_Agregados` v2.1.0
+  → `Sistema-Financeiro` v1.5.0. (A primeira tentativa da Release do Enviador falhou numa queda do
+  GitHub; a tag foi recriada no mesmo commit.)
 
 **Retomando numa sessão nova (leia isto primeiro)**
 - Economize tokens (pedido do Erik): trabalhe direto, sem subagentes; não releia planos nem
   ledgers inteiros; use `graphify query` antes de ler código.
-- Estado: planos 1 a 7 implementados, salvos e **lançados em 25/11/2026**: `Tcm-ui` v1.5.0 (tag),
-  Releases `Send_Agregados` v2.0.1, `pdf-merge` v3.0.0, `pdf-xml-mailer` v2.0.0, `Renomeador_CTE`
-  v2.0.0, `Projeto_Catraca` v2.0.0 e `Sistema-Financeiro` v1.4.0. Os usuários recebem pela
-  atualização automática.
-- Testes na última rodada: `Tcm-ui` 161, `Projeto_Catraca` 129, casca 51, `Renomeador_CTE` 58,
-  `pdf-xml-mailer` 138, `pdf-merge` 27, `Send_Agregados` 23. Cada um com
+- Estado: planos 1 a 8 implementados, salvos e **lançados em 25/11/2026**. Versões atuais: `Tcm-ui`
+  v1.6.0 (tag), Releases `Send_Agregados` v2.1.0, `pdf-merge` v3.0.0, `pdf-xml-mailer` v2.1.0,
+  `Renomeador_CTE` v2.0.0, `Projeto_Catraca` v2.0.0 e `Sistema-Financeiro` v1.5.0. Os usuários
+  recebem pela atualização automática.
+- Testes na última rodada: `Tcm-ui` 194, `Projeto_Catraca` 129, casca 51, `Renomeador_CTE` 58,
+  `pdf-xml-mailer` 123, `pdf-merge` 27, `Send_Agregados` 55. Cada um com
   `.venv\Scripts\python -m pytest -q`.
 - Build: `powershell -NoProfile -ExecutionPolicy Bypass -File build.ps1` (casca: `-Local`).
 - A revisão final do plano 7 (integração dos cinco módulos) foi **concluída em 25/11, sem nada que
@@ -143,7 +143,7 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
    `requirements*.txt`); para atualizar, mudar lá e testar o `.exe` antes de salvar.
 3. Atualização automática testada pelo Erik em 25/11 depois do lançamento: funcionou. Próximo: o
    refino acima, quando ele pedir.
-4. Feito no plano 8 (falta testar e lançar): login Microsoft (OAuth) também no RoboAgregado, porque a
+4. Feito e lançado no plano 8: login Microsoft (OAuth) também no RoboAgregado, porque a
    Microsoft vai desligar o SMTP com autenticação básica: desligado por padrão no fim de 12/2026
    (o administrador ainda pode religar), data final a anunciar em 2027. Pode usar o mesmo registro de
    aplicativo da Azure do Enviador (permissão delegada `SMTP.Send`).
