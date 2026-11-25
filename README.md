@@ -10,7 +10,10 @@ O acesso é por grupo do Windows (AD): um grupo `SF-*` por sistema, e `SF-Admin`
 todos. Peça ao TI para entrar no grupo do sistema que precisa:
 
 - `SF-RoboAgregado`
-- `SF-Mesclador`, `SF-EnviadorPDFXML`, `SF-RenomeadorCTE`, `SF-Catraca` (futuros)
+- `SF-Mesclador`
+- `SF-EnviadorPDFXML`
+- `SF-RenomeadorCTE`
+- `SF-Catraca`
 - `SF-Admin` (vê todos os sistemas)
 
 A mudança só vale depois de **sair e entrar de novo no Windows** (bloquear a tela ou reiniciar o
@@ -60,10 +63,9 @@ powershell -File build.ps1
 Cria um venv limpo em `build\venv`, instala `requirements.txt`, roda os testes, gera
 `dist\SistemaFinanceiro.exe` e o `.sha256`, e confere o `.exe` com `--verificar`.
 
-**Modo local (`-Local`)**: `powershell -File build.ps1 -Local` instala `..\Tcm-ui` e
-`..\Send_Agregados` das pastas vizinhas (`requirements-local.txt`). Existe só até as tags
-`v1.1.0` (Tcm-ui) e `v2.0.0` (Send_Agregados) serem criadas; depois, apague
-`requirements-local.txt` e o `-Local`.
+**Modo local (`-Local`)**: `powershell -File build.ps1 -Local` instala `..\Tcm-ui`,
+`..\Send_Agregados`, `..\pdf-merge`, `..\pdf-xml-mailer`, `..\Renomeador_CTE` e `..\Projeto_Catraca` das pastas vizinhas (`requirements-local.txt`), para testar
+antes de criar as tags dos repositórios dos sistemas.
 
 Para lançar: suba `__version__` em `src/sistema_financeiro/__init__.py`, crie a tag
 `vX.Y.Z` igual à versão e envie (`git push origin vX.Y.Z`). O workflow `Release` gera o

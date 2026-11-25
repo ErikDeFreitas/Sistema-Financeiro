@@ -7,6 +7,10 @@ from pathlib import Path
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 os.environ["ROBO_AGREGADO_DADOS"] = tempfile.mkdtemp(prefix="robo_agregado_dados_")
 os.environ["SISTEMA_FINANCEIRO_DADOS"] = tempfile.mkdtemp(prefix="sistema_financeiro_dados_")
+os.environ["MESCLADOR_DADOS"] = tempfile.mkdtemp(prefix="mesclador_dados_")
+os.environ["ENVIADOR_DADOS"] = tempfile.mkdtemp(prefix="enviador_dados_")
+os.environ["RENOMEADOR_DADOS"] = tempfile.mkdtemp(prefix="renomeador_dados_")
+os.environ["CATRACA_DADOS"] = tempfile.mkdtemp(prefix="catraca_dados_")
 os.environ["SMTP_USUARIO"] = "teste@exemplo.invalid"
 os.environ["SMTP_SENHA"] = "senha-ficticia"
 
@@ -41,6 +45,54 @@ def _qsettings_fora_do_registro(tmp_path_factory):
 @pytest.fixture(autouse=True)
 def _sem_grupos_dev(monkeypatch):
     monkeypatch.delenv("SF_GRUPOS_DEV", raising=False)
+
+
+@pytest.fixture(autouse=True)
+def tentativas_de_rede(monkeypatch):
+    """Nenhum teste da casca alcanca a rede: connect/connect_ex para fora do loopback levantam erro.
+
+    Devolve a lista de enderecos externos tentados (para os testes conferirem que ficou vazia).
+    """
+    import ipaddress
+    import socket
+
+    tentativas = []
+    connect, connect_ex = socket.socket.connect, socket.socket.connect_ex
+
+    def externo(endereco):
+        if not isinstance(endereco, tuple):  # AF_UNIX / pipes: nao e rede
+            return False
+        try:
+            return not ipaddress.ip_address(endereco[0]).is_loopback
+        except ValueError:  # nome de host: so "localhost" e permitido
+            return endereco[0] != "localhost"
+
+    def barrado(self, endereco):
+        if externo(endereco):
+            tentativas.append(endereco)
+            raise OSError(f"rede bloqueada nos testes: {endereco}")
+        return connect(self, endereco)
+
+    def barrado_ex(self, endereco):
+        if externo(endereco):
+            tentativas.append(endereco)
+            return 111  # ECONNREFUSED
+        return connect_ex(self, endereco)
+
+    monkeypatch.setattr(socket.socket, "connect", barrado)
+    monkeypatch.setattr(socket.socket, "connect_ex", barrado_ex)
+    return tentativas
+
+
+@pytest.fixture(autouse=True)
+def _enviador_sem_rede(monkeypatch):
+    """A Conta Microsoft do Enviador faz um GET sem login ao ser criada; sem rede a pagina abre com aviso."""
+    from enviador_pdf_xml import instancia
+
+    def sem_rede():
+        raise OSError("sem rede nos testes")
+
+    monkeypatch.setattr(instancia, "FABRICA_CONTA", sem_rede)
 
 
 @pytest.fixture

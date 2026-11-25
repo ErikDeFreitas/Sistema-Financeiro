@@ -5,3 +5,12 @@ dist/
 .pytest_cache/
 __pycache__/
 .superpowers/
+
+# grafo: só os resultados vão para o git (o resto guarda caminhos da máquina)
+graphify-out/*
+!graphify-out/graph.json
+!graphify-out/graph.html
+!graphify-out/GRAPH_REPORT.md
+!graphify-out/.graphify_labels.json
+.claude/
+undefined/

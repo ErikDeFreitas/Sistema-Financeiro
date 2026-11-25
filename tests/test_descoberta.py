@@ -41,3 +41,13 @@ def test_id_repetido_fica_o_primeiro(criar_modulo_falso, caplog):
 
 def test_robo_agregado_instalado_pelo_entry_point():
     assert "robo_agregado" in [m.id for m in carregar_modulos()]
+
+
+def test_cinco_modulos_instalados_e_ordem_na_barra():
+    modulos = carregar_modulos()
+    assert [m.id for m in modulos][:5] == [
+        "robo_agregado", "mesclador", "enviador_pdf_xml", "renomeador_cte", "sistema_catraca"]
+    assert [m.nome for m in modulos][:5] == [
+        "RoboAgregado", "Mesclador de PDFs", "Enviador de PDF + XML", "Renomeador de CT-e", "Sistema Catraca"]
+    catraca = modulos[4]
+    assert [p.titulo for p in catraca.paginas] == ["Relatório de acessos", "Usuários"]

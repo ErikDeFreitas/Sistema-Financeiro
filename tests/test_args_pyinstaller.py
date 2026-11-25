@@ -24,3 +24,39 @@ def test_inclui_pacote_e_metadados_do_robo_agregado():
     linhas = _linhas()
     assert _tem_par(linhas, "--collect-all", "robo_agregado")
     assert _tem_par(linhas, "--copy-metadata", "robo-agregado")
+
+
+def test_inclui_pacote_e_metadados_do_mesclador():
+    linhas = _linhas()
+    assert _tem_par(linhas, "--collect-all", "mesclador")
+    assert _tem_par(linhas, "--copy-metadata", "mesclador")
+
+
+def test_args_pyinstaller_inclui_enviador():
+    linhas = _linhas()
+    assert _tem_par(linhas, "--collect-all", "enviador_pdf_xml")
+    assert _tem_par(linhas, "--copy-metadata", "enviador-pdf-xml")
+
+
+def test_args_pyinstaller_inclui_renomeador():
+    linhas = _linhas()
+    assert _tem_par(linhas, "--collect-all", "renomeador_cte")
+    assert _tem_par(linhas, "--copy-metadata", "renomeador-cte")
+
+
+def test_args_pyinstaller_inclui_catraca():
+    linhas = _linhas()
+    assert _tem_par(linhas, "--collect-all", "sistema_catraca")
+    assert _tem_par(linhas, "--copy-metadata", "sistema-catraca")
+
+
+def test_requests_da_catraca_esta_instalado_para_entrar_no_exe():
+    import importlib.util
+
+    assert importlib.util.find_spec("requests") is not None
+
+
+def test_versao_da_casca():
+    from sistema_financeiro import __version__
+
+    assert __version__ == "1.4.0"

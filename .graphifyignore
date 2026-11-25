@@ -1,0 +1,8 @@
+# Fora do grafo (graphify): ambientes, builds, área de trabalho local e planos de execução
+.venv/
+build/
+dist/
+.pytest_cache/
+.superpowers/
+graphify-out/
+docs/superpowers/plans/

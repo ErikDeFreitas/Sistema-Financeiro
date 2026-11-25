@@ -1,8 +1,8 @@
 # Gera o SistemaFinanceiro.exe e o .sha256 que acompanham cada Release no GitHub.
 # Antes: aumente __version__ em src\sistema_financeiro\__init__.py.
 # Uso:  powershell -File build.ps1            (venv limpo, instala de requirements.txt)
-#       powershell -File build.ps1 -Local     (venv limpo, instala ..\Tcm-ui e ..\Send_Agregados;
-#                                              so ate as tags v1.1.0 e v2.0.0 existirem)
+#       powershell -File build.ps1 -Local     (venv limpo, instala ..\Tcm-ui, ..\Send_Agregados, ..\pdf-merge,
+#                                              ..\pdf-xml-mailer, ..\Renomeador_CTE e ..\Projeto_Catraca das pastas vizinhas, para testar antes de criar as tags)
 #       powershell -File build.ps1 -Python python   (CI: o workflow ja instalou tudo)
 param([string]$Python, [switch]$Local)
 Set-Location $PSScriptRoot
@@ -22,8 +22,8 @@ if (-not $Python) {
     $Python = Join-Path $venv "Scripts\python.exe"
     Invoke-Nativo { & $Python -m pip install --quiet --upgrade pip } "pip."
     if ($Local) {
-        Invoke-Nativo { & $Python -m pip install --quiet -r requirements-local.txt } "requirements-local.txt."
-        Invoke-Nativo { & $Python -m pip install --quiet --no-deps ../Send_Agregados . } "instalar Send_Agregados e a casca."
+        # --no-cache-dir: um wheel antigo em cache para o mesmo caminho local (ex.: tcm-ui 1.0.0) quebra a resolucao.
+        Invoke-Nativo { & $Python -m pip install --quiet --no-cache-dir -r requirements-local.txt . } "instalar os sistemas locais e a casca."
     } else {
         Invoke-Nativo { & $Python -m pip install --quiet -r requirements.txt } "requirements.txt."
         Invoke-Nativo { & $Python -m pip install --quiet . } "instalar a casca."
@@ -41,11 +41,18 @@ $antes = if (Test-Path $exe) { (Get-Item $exe).LastWriteTime } else { [datetime]
 $argsSistemas = @(& $Python ferramentas\args_pyinstaller.py)
 if ($LASTEXITCODE -ne 0) { Write-Host "`nERRO: args_pyinstaller.py falhou." -ForegroundColor Red; exit 1 }
 
-# Importacoes ocultas que o PyInstaller nao enxerga:
-#   openpyxl, pythoncom, win32com.client -> robo_agregado (planilhas e Outlook via COM)
+# Importacoes ocultas que o PyInstaller nao enxerga (UMA lista: vai para o PyInstaller e para a
+# verificacao do .exe, que tenta importar cada uma; sem isso um .exe sem elas passaria):
+$ocultas = @(
+    "openpyxl", "pythoncom", "win32com.client"   # robo_agregado (planilhas e Outlook via COM)
+    "msal", "msal_extensions"                     # enviador_pdf_xml (login Microsoft; importados dentro de funcoes)
+)
+# (a catraca usa requests, que o PyInstaller enxerga; o --collect-all do pacote cobre o resto)
+# (o mesclador nao precisa de importacoes ocultas; pypdf e pillow sao enxergados pelo PyInstaller)
+$argsOcultas = @($ocultas | ForEach-Object { "--hidden-import"; $_ })
 & $Python -m PyInstaller --noconfirm --onefile --windowed --name $nome `
     @argsSistemas `
-    --hidden-import openpyxl --hidden-import pythoncom --hidden-import win32com.client `
+    @argsOcultas `
     --exclude-module matplotlib --exclude-module scipy --exclude-module IPython --exclude-module tkinter `
     --workpath build --specpath build --distpath dist main.py
 if ($LASTEXITCODE -ne 0 -or -not (Test-Path $exe) -or (Get-Item $exe).LastWriteTime -le $antes) {
@@ -57,11 +64,23 @@ if ($LASTEXITCODE -ne 0 -or -not (Test-Path $exe) -or (Get-Item $exe).LastWriteT
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ("sf-verificar-" + [guid]::NewGuid().ToString("N"))
 $dadosSf = Join-Path $tmp "sf"
 $dadosRobo = Join-Path $tmp "robo"
-New-Item -ItemType Directory -Force $dadosSf, $dadosRobo | Out-Null
+$dadosMesclador = Join-Path $tmp "mesclador"
+$dadosEnviador = Join-Path $tmp "enviador"
+$dadosRenomeador = Join-Path $tmp "renomeador"
+$dadosCatraca = Join-Path $tmp "catraca"
+New-Item -ItemType Directory -Force $dadosSf, $dadosRobo, $dadosMesclador, $dadosEnviador, $dadosRenomeador, $dadosCatraca | Out-Null
 $salvas = @{}
 $vars = @{
     SISTEMA_FINANCEIRO_DADOS = $dadosSf
     ROBO_AGREGADO_DADOS      = $dadosRobo
+    MESCLADOR_DADOS          = $dadosMesclador
+    ENVIADOR_DADOS           = $dadosEnviador
+    RENOMEADOR_DADOS         = $dadosRenomeador
+    CATRACA_DADOS            = $dadosCatraca
+    SF_VERIFICAR_IMPORTS     = ($ocultas -join ";")
+    # proxy morto: a Conta Microsoft do Enviador faz um GET sem login ao ser criada; a verificacao nao sai para a rede
+    HTTP_PROXY               = "http://127.0.0.1:9"
+    HTTPS_PROXY              = "http://127.0.0.1:9"
     SMTP_USUARIO             = "teste@example.com"
     SMTP_SENHA               = "senha-falsa"
     QT_QPA_PLATFORM          = "offscreen"

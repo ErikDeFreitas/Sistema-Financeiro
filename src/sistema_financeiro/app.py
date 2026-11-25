@@ -1,6 +1,7 @@
 """Casca do Sistema Financeiro: monta a janela com os módulos permitidos ao usuário."""
 from __future__ import annotations
 
+import importlib
 import logging
 import os
 import sys
@@ -52,6 +53,18 @@ def criar_janela(modulos: Sequence[Modulo], grupos: Iterable[str], usuario: str,
     )
 
 
+def _importacoes_faltando() -> list[str]:
+    """Nomes de SF_VERIFICAR_IMPORTS (separados por ;) que nao importam; o build.ps1 passa a lista do .exe."""
+    faltando = []
+    for nome in filter(None, (n.strip() for n in os.environ.get("SF_VERIFICAR_IMPORTS", "").split(";"))):
+        try:
+            importlib.import_module(nome)
+        except Exception:  # noqa: BLE001 - qualquer falha de importacao reprova a verificacao
+            log.exception("Verificação: importação oculta ausente: %s", nome)
+            faltando.append(nome)
+    return faltando
+
+
 def verificar_modulos() -> int:
     """0 se todo módulo instalado abre todas as suas páginas sem erro; 1 caso contrário."""
     _app = QApplication.instance() or QApplication(sys.argv[:1])  # noqa: F841
@@ -59,6 +72,8 @@ def verificar_modulos() -> int:
         tema.aplicar(_app)
     except Exception:
         log.exception("Verificação: falha ao aplicar o tema (styles.qss)")
+        return 1
+    if _importacoes_faltando():
         return 1
     pontos = list(entry_points(group=GRUPO_ENTRY_POINT))
     modulos = carregar_modulos(pontos)

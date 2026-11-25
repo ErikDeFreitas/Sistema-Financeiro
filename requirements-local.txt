@@ -1,8 +1,11 @@
-# Modo local: existe SO ate as tags v1.1.0 (Tcm-ui) e v2.0.0 (Send_Agregados) serem criadas.
-# Depois disso, use requirements.txt e apague este arquivo e o -Local do build.ps1.
-# O robo-agregado fixa tcm-ui@v1.1.0 (tag que ainda nao existe), entao ele NAO vem daqui:
-# o build.ps1 -Local instala ../Send_Agregados com --no-deps depois destas linhas.
+# Modo local: usa os clones vizinhos em vez das tags do GitHub (so para desenvolver/testar antes de salvar versao).
+# O build.ps1 -Local instala estes caminhos junto com a casca (pip resolve as dependencias entre eles).
 ../Tcm-ui
+../Send_Agregados
+../pdf-merge
+../pdf-xml-mailer
+../Renomeador_CTE
+../Projeto_Catraca
 pandas
 openpyxl
 pywin32; sys_platform == 'win32'
