@@ -11,8 +11,7 @@ os.environ["MESCLADOR_DADOS"] = tempfile.mkdtemp(prefix="mesclador_dados_")
 os.environ["ENVIADOR_DADOS"] = tempfile.mkdtemp(prefix="enviador_dados_")
 os.environ["RENOMEADOR_DADOS"] = tempfile.mkdtemp(prefix="renomeador_dados_")
 os.environ["CATRACA_DADOS"] = tempfile.mkdtemp(prefix="catraca_dados_")
-os.environ["SMTP_USUARIO"] = "teste@exemplo.invalid"
-os.environ["SMTP_SENHA"] = "senha-ficticia"
+os.environ["TCM_CONTA_MICROSOFT"] = tempfile.mkdtemp(prefix="conta_microsoft_")
 
 import pytest  # noqa: E402
 from PySide6 import QtCore  # noqa: E402
@@ -85,14 +84,17 @@ def tentativas_de_rede(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def _enviador_sem_rede(monkeypatch):
-    """A Conta Microsoft do Enviador faz um GET sem login ao ser criada; sem rede a pagina abre com aviso."""
+def _conta_microsoft_sem_rede(monkeypatch):
+    """A Conta Microsoft (Enviador e RoboAgregado) faz um GET sem login ao ser criada; sem rede as paginas
+    abrem com aviso, sem nenhum dialogo modal."""
     from enviador_pdf_xml import instancia
+    from robo_agregado import tela
 
     def sem_rede():
         raise OSError("sem rede nos testes")
 
     monkeypatch.setattr(instancia, "FABRICA_CONTA", sem_rede)
+    monkeypatch.setattr(tela, "FABRICA_CONTA", sem_rede)
 
 
 @pytest.fixture

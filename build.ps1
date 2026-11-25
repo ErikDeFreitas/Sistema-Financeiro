@@ -68,7 +68,8 @@ $dadosMesclador = Join-Path $tmp "mesclador"
 $dadosEnviador = Join-Path $tmp "enviador"
 $dadosRenomeador = Join-Path $tmp "renomeador"
 $dadosCatraca = Join-Path $tmp "catraca"
-New-Item -ItemType Directory -Force $dadosSf, $dadosRobo, $dadosMesclador, $dadosEnviador, $dadosRenomeador, $dadosCatraca | Out-Null
+$dadosConta = Join-Path $tmp "conta"
+New-Item -ItemType Directory -Force $dadosSf, $dadosRobo, $dadosMesclador, $dadosEnviador, $dadosRenomeador, $dadosCatraca, $dadosConta | Out-Null
 $salvas = @{}
 $vars = @{
     SISTEMA_FINANCEIRO_DADOS = $dadosSf
@@ -78,11 +79,10 @@ $vars = @{
     RENOMEADOR_DADOS         = $dadosRenomeador
     CATRACA_DADOS            = $dadosCatraca
     SF_VERIFICAR_IMPORTS     = ($ocultas -join ";")
-    # proxy morto: a Conta Microsoft do Enviador faz um GET sem login ao ser criada; a verificacao nao sai para a rede
+    # proxy morto: a Conta Microsoft (Enviador e RoboAgregado) faz um GET sem login ao ser criada; a verificacao nao sai para a rede
     HTTP_PROXY               = "http://127.0.0.1:9"
     HTTPS_PROXY              = "http://127.0.0.1:9"
-    SMTP_USUARIO             = "teste@example.com"
-    SMTP_SENHA               = "senha-falsa"
+    TCM_CONTA_MICROSOFT      = $dadosConta
     QT_QPA_PLATFORM          = "offscreen"
 }
 foreach ($k in $vars.Keys) {

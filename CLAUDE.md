@@ -92,6 +92,21 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
   ao da 1.0.0, antes da tag do `Projeto_Catraca`; conferir também a aba Releases do
   `Projeto_Catraca`, pois a 1.0.0 pode nunca ter sido publicada).
 
+- Plano 8 (login Microsoft padronizado) — spec `docs/superpowers/specs/2026-11-25-login-microsoft-design.md`,
+  plano `docs/superpowers/plans/2026-11-25-plano-8-login-microsoft.md`, **implementado, sem commit**.
+  `Tcm-ui` 1.6.0: `tcm_ui.microsoft` (Conta MSAL, cache DPAPI compartilhado em
+  `%LOCALAPPDATA%\TCM\ContaMicrosoft`, `TCM_CONTA_MICROSOFT` troca a pasta, `abrir_smtp` XOAUTH2,
+  `criar_conta_em_segundo_plano`) e `tcm_ui.microsoft_ui.CartaoContaMicrosoft`; extra `tcm-ui[microsoft]`.
+  194 testes. `pdf-xml-mailer` 2.1.0 usa o Tcm-ui e migra o login antigo (123 testes).
+  `Send_Agregados` 2.1.0: método `microsoft` (padrão; `smtp` antigo vira `microsoft`), botão "Conta de
+  envio..." com "Enviar como", `.env` migrado e apagado, `ErroSessao` reabre o diálogo; sem internet não
+  abre diálogo sozinho (55 testes). Casca 1.5.0 (51 testes, `.exe` verificado). Ledger:
+  `.superpowers/sdd/2026-11-25-plano-8-login-microsoft/`.
+  **Antes de salvar**: o Erik testa o `RoboAgregado.exe` novo (login próprio + "Enviar como" a caixa do
+  financeiro, depois que a TI der a permissão "Enviar como") e o `EnviadorEmails.exe` sem entrar de novo.
+  **Ordem do "Salvar versão"**: `Tcm-ui` v1.6.0 (tag) → `pdf-xml-mailer` v2.1.0 → `Send_Agregados` v2.1.0
+  → `Sistema-Financeiro` v1.5.0.
+
 **Retomando numa sessão nova (leia isto primeiro)**
 - Economize tokens (pedido do Erik): trabalhe direto, sem subagentes; não releia planos nem
   ledgers inteiros; use `graphify query` antes de ler código.
@@ -126,9 +141,9 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
    do domínio): conferir se os grupos resolvem (o log avisa "grupo(s) do token sem nome").
 2. Versões das bibliotecas de terceiros fixadas em `versoes.txt` (incluído pelos dois
    `requirements*.txt`); para atualizar, mudar lá e testar o `.exe` antes de salvar.
-3. Conferir se os usuários receberam as atualizações sem problema; depois, o refino acima.
-4. **Futuro (não agora, pedido do Erik)**: levar o login Microsoft (OAuth) do Enviador de PDF + XML
-   para os outros sistemas que enviam e-mail (hoje o RoboAgregado, `metodo = smtp`), porque a
+3. Atualização automática testada pelo Erik em 25/11 depois do lançamento: funcionou. Próximo: o
+   refino acima, quando ele pedir.
+4. Feito no plano 8 (falta testar e lançar): login Microsoft (OAuth) também no RoboAgregado, porque a
    Microsoft vai desligar o SMTP com autenticação básica: desligado por padrão no fim de 12/2026
    (o administrador ainda pode religar), data final a anunciar em 2027. Pode usar o mesmo registro de
    aplicativo da Azure do Enviador (permissão delegada `SMTP.Send`).

@@ -1,6 +1,6 @@
 # Modo local: usa os clones vizinhos em vez das tags do GitHub (so para desenvolver/testar antes de salvar versao).
 # O build.ps1 -Local instala estes caminhos junto com a casca (pip resolve as dependencias entre eles).
-../Tcm-ui
+../Tcm-ui[microsoft]
 ../Send_Agregados
 ../pdf-merge
 ../pdf-xml-mailer
