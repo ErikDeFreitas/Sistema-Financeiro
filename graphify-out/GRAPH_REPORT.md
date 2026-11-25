@@ -1,17 +1,17 @@
 # Graph Report - Sistema-Financeiro  (2026-11-25)
 
 ## Corpus Check
-- 24 files · ~9,760 words
+- 18 files · ~9,552 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 6 file(s) not represented in the graph (top: (none) 3, .jsonl 2, .tmp 1)
+- Unclassified: 3 file(s) not represented in the graph (top: (none) 3)
 
 ## Summary
-- 224 nodes · 352 edges · 12 communities (9 shown, 3 thin omitted)
-- Extraction: 85% EXTRACTED · 15% INFERRED · 0% AMBIGUOUS · INFERRED: 54 edges (avg confidence: 0.86)
+- 224 nodes · 353 edges · 12 communities (9 shown, 3 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.88)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `db641d91`
+- Built from commit: `d59abe10`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,24 +33,24 @@
 2. `criar_janela()` - 17 edges
 3. `verificar_modulos()` - 14 edges
 4. `permitidos()` - 13 edges
-5. `Casca (Sistema-Financeiro)` - 9 edges
-6. `Contrato de modulo (Modulo, Pagina, InstanciaModulo, Contexto)` - 9 edges
-7. `tcm-ui (design system unico)` - 9 edges
-8. `_linhas()` - 8 edges
-9. `rodar()` - 8 edges
-10. `steps` - 8 edges
+5. `rodar()` - 9 edges
+6. `Casca (Sistema-Financeiro)` - 9 edges
+7. `Contrato de modulo (Modulo, Pagina, InstanciaModulo, Contexto)` - 9 edges
+8. `tcm-ui (design system unico)` - 9 edges
+9. `steps` - 8 edges
+10. `_linhas()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Workflow Release (tag vX.Y.Z = __version__)` --semantically_similar_to--> `Build e release (PyInstaller, tag = __version__)`  [INFERRED] [semantically similar]
   README.md → docs/superpowers/specs/2026-11-19-sistema-financeiro-design.md
-- `test_ultima_pagina_de_sistema_perdido_abre_a_primeira_permitida()` --calls--> `criar_janela()`  [INFERRED]
-  tests/test_app.py → src/sistema_financeiro/app.py
-- `test_robo_agregado_abre_na_casca()` --calls--> `carregar_modulos()`  [INFERRED]
-  tests/test_app.py → src/sistema_financeiro/descoberta.py
-- `test_so_o_grupo_do_enviador_mostra_so_o_enviador()` --calls--> `carregar_modulos()`  [INFERRED]
-  tests/test_app.py → src/sistema_financeiro/descoberta.py
-- `test_so_o_grupo_do_renomeador_mostra_so_o_renomeador()` --calls--> `carregar_modulos()`  [INFERRED]
-  tests/test_app.py → src/sistema_financeiro/descoberta.py
+- `test_admin_ve_todos_na_ordem()` --calls--> `permitidos()`  [EXTRACTED]
+  tests/test_acesso.py → src/sistema_financeiro/acesso.py
+- `test_sem_grupo_nenhum_modulo()` --calls--> `permitidos()`  [EXTRACTED]
+  tests/test_acesso.py → src/sistema_financeiro/acesso.py
+- `README Sistema Financeiro` --references--> `Casca (Sistema-Financeiro)`  [INFERRED]
+  README.md → docs/superpowers/specs/2026-11-19-sistema-financeiro-design.md
+- `test_dev_ignorado_quando_congelado()` --calls--> `grupos_do_usuario()`  [EXTRACTED]
+  tests/test_acesso.py → src/sistema_financeiro/acesso.py
 
 ## Import Cycles
 - None detected.
@@ -63,7 +63,7 @@
 
 ### Community 0 - "Janela e Execução da Casca"
 Cohesion: 0.08
-Nodes (28): permitidos(), criar_janela(), pasta_dados(), rodar(), verificar_modulos(), test_permitidos_por_grupo_sem_caixa_e_sem_dominio(), _Instancia, test_barra_da_catraca_tem_secao_e_dois_itens_sem_abas_internas() (+20 more)
+Nodes (29): permitidos(), criar_janela(), pasta_dados(), rodar(), verificar_modulos(), test_permitidos_por_grupo_sem_caixa_e_sem_dominio(), _Instancia, test_barra_da_catraca_tem_secao_e_dois_itens_sem_abas_internas() (+21 more)
 
 ### Community 1 - "Utilitários e Args PyInstaller"
 Cohesion: 0.09
@@ -99,23 +99,23 @@ Nodes (4): CLAUDE.md - estado do projeto, Ordem do Salvar versao (Tcm-ui, Send_A
 
 ## Knowledge Gaps
 - **15 isolated node(s):** `sistema-financeiro`, `Plano 1 - Tcm-ui v1.0.0`, `Plano 2 - RoboAgregado 2.0.0 / Tcm-ui 1.1.0`, `Plano 3 - casca 1.0.0`, `Plano 4 - Mesclador (casca 1.1.0, nao salvo)` (+10 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 92 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 91 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `carregar_modulos()` connect `Descoberta de Módulos` to `Janela e Execução da Casca`, `Utilitários e Args PyInstaller`?**
-  _High betweenness centrality (0.064) - this node is a cross-community bridge._
-- **Are the 13 inferred relationships involving `carregar_modulos()` (e.g. with `chave()` and `test_abrir_o_enviador_na_casca_nao_tenta_rede_externa()`) actually correct?**
-  _`carregar_modulos()` has 13 INFERRED edges - model-reasoned connections that need verification._
+  _High betweenness centrality (0.065) - this node is a cross-community bridge._
+- **Are the 3 inferred relationships involving `permitidos()` (e.g. with `test_so_o_grupo_da_catraca_mostra_so_a_catraca()` and `test_so_o_grupo_do_enviador_mostra_so_o_enviador()`) actually correct?**
+  _`permitidos()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `sistema-financeiro`, `Plano 1 - Tcm-ui v1.0.0`, `Plano 2 - RoboAgregado 2.0.0 / Tcm-ui 1.1.0` to the rest of the system?**
   _15 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Janela e Execução da Casca` be split into smaller, more focused modules?**
-  _Cohesion score 0.07505285412262157 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07610993657505286 - nodes in this community are weakly interconnected._
 - **Why does `criar_janela()` connect `Janela e Execução da Casca` to `Utilitários e Args PyInstaller`, `Descoberta de Módulos`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Are the 10 inferred relationships involving `criar_janela()` (e.g. with `test_abrir_o_enviador_na_casca_nao_tenta_rede_externa()` and `test_barra_da_catraca_tem_secao_e_dois_itens_sem_abas_internas()`) actually correct?**
-  _`criar_janela()` has 10 INFERRED edges - model-reasoned connections that need verification._
 - **Should `Utilitários e Args PyInstaller` be split into smaller, more focused modules?**
   _Cohesion score 0.08669354838709678 - nodes in this community are weakly interconnected._
+- **Why does `permitidos()` connect `Janela e Execução da Casca` to `Utilitários e Args PyInstaller`, `Acesso por Grupos AD`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._

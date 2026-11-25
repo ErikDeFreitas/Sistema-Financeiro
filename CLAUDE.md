@@ -95,15 +95,18 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
 **Retomando numa sessão nova (leia isto primeiro)**
 - Economize tokens (pedido do Erik): trabalhe direto, sem subagentes; não releia planos nem
   ledgers inteiros; use `graphify query` antes de ler código.
-- Estado: planos 1 a 7 implementados e salvos em 25/11/2026 (um commit e push em cada um dos 7
-  repositórios), **sem tag nem Release**: ninguém recebeu atualização. Os pins já apontam para
-  `v1.5.0` do `Tcm-ui`, que só existe quando a tag for criada. Falta lançar, na ordem do plano 7.
+- Estado: planos 1 a 7 implementados, salvos e **lançados em 25/11/2026**: `Tcm-ui` v1.5.0 (tag),
+  Releases `Send_Agregados` v2.0.1, `pdf-merge` v3.0.0, `pdf-xml-mailer` v2.0.0, `Renomeador_CTE`
+  v2.0.0, `Projeto_Catraca` v2.0.0 e `Sistema-Financeiro` v1.4.0. Os usuários recebem pela
+  atualização automática.
 - Testes na última rodada: `Tcm-ui` 161, `Projeto_Catraca` 129, casca 51, `Renomeador_CTE` 58,
   `pdf-xml-mailer` 138, `pdf-merge` 27, `Send_Agregados` 23. Cada um com
   `.venv\Scripts\python -m pytest -q`.
 - Build: `powershell -NoProfile -ExecutionPolicy Bypass -File build.ps1` (casca: `-Local`).
-- A revisão final do plano 7 (integração dos cinco módulos) **não foi concluída**; a busca por dados
-  reais nos 7 repositórios foi feita em 25/11 (só dados fictícios).
+- A revisão final do plano 7 (integração dos cinco módulos) foi **concluída em 25/11, sem nada que
+  impeça o lançamento**: contratos, estado compartilhado, barra lateral em 900×600, versões × pins e
+  compatibilidade dos atualizadores antigos com as Releases novas. A busca por dados reais nos 7
+  repositórios também foi feita (só dados fictícios).
 - Visual sem captura de tela: `widget.grab()` com `QT_QPA_PLATFORM=offscreen`. Em offscreen o
   diálogo de primeiro acesso do Enviador trava o script: deixe esse módulo de fora.
 
@@ -114,12 +117,21 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
 3. READMEs: Renomeador (log), `Tcm-ui` (rodapé com a versão do módulo), Catraca (quem nunca editou a
    lista de usuários na 1.0.0 precisa buscá-la de novo).
 4. Conferir à mão o calendário e a marcação da tabela da Catraca nos dois temas.
+5. RoboAgregado: "Fechar mesmo assim" durante o envio mata a thread sem pedir parada; se cair entre
+   o envio e o registro no log, aquele extrato pode ser reenviado depois (janela estreita).
 
 **Próximo**
-1. Teste manual da casca fora da rede (VPN/cabo desligados) num computador do domínio, antes de
-   distribuir: conferir se os grupos resolvem (o log avisa "grupo(s) do token sem nome").
-2. Planos 1 a 7 implementados; falta testar manualmente e lançar as tags (ordem no plano 7).
-   Depois, decidir o que vem a seguir.
+1. Testes manuais do Erik em 25/11: tudo o que pôde testar funcionou, inclusive a conta Microsoft
+   no `EnviadorEmails.exe` novo e o CSV da Catraca igual ao da 1.0.0. **Falta só a casca fora da rede** (VPN/cabo desligados, computador
+   do domínio): conferir se os grupos resolvem (o log avisa "grupo(s) do token sem nome").
+2. Versões das bibliotecas de terceiros fixadas em `versoes.txt` (incluído pelos dois
+   `requirements*.txt`); para atualizar, mudar lá e testar o `.exe` antes de salvar.
+3. Conferir se os usuários receberam as atualizações sem problema; depois, o refino acima.
+4. **Futuro (não agora, pedido do Erik)**: levar o login Microsoft (OAuth) do Enviador de PDF + XML
+   para os outros sistemas que enviam e-mail (hoje o RoboAgregado, `metodo = smtp`), porque a
+   Microsoft vai desligar o SMTP com autenticação básica: desligado por padrão no fim de 12/2026
+   (o administrador ainda pode religar), data final a anunciar em 2027. Pode usar o mesmo registro de
+   aplicativo da Azure do Enviador (permissão delegada `SMTP.Send`).
    Lembrete: `enviar_fretes.carregar_env` põe `SMTP_SENHA` no `os.environ` do processo
    (compartilhado com os outros módulos na casca).
 
@@ -129,8 +141,8 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
   global do Erik para projetos novos: validar dados sensíveis, `/graphify .`,
   `graphify claude install`, `graphify hook install`). Depois de mudanças grandes aqui:
   `graphify update .`.
-- Grupos `SF-Mesclador`, `SF-EnviadorPDFXML`, `SF-RenomeadorCTE`, `SF-Catraca`: a TI cria
-  (os quatro sistemas já estão na casca).
+- Grupos `SF-Mesclador`, `SF-EnviadorPDFXML`, `SF-RenomeadorCTE`, `SF-Catraca`: já criados no AD
+  (informado em 25/11).
 
 ## graphify
 
