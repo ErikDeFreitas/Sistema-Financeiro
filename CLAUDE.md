@@ -63,8 +63,6 @@ inteiros; e os READMEs.
 
 ## Pendente
 
-- Testar a casca fora da rede (VPN/cabo desligados, computador do domínio): conferir se os
-  grupos resolvem (o log avisa "grupo(s) do token sem nome").
 - Grafo do `Tcm-ui` gerado em 26/11 (só AST; o README ficou fora da extração semântica). O
   `graphify.exe` falha com "uv trampoline failed to canonicalize script path"; use
   `C:\Users\erik.freitas\.local\graphify-venv\Scripts\python.exe -m graphify ...`. Os hooks do
