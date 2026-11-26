@@ -59,4 +59,4 @@ def test_requests_da_catraca_esta_instalado_para_entrar_no_exe():
 def test_versao_da_casca():
     from sistema_financeiro import __version__
 
-    assert __version__ == "1.5.1"
+    assert __version__ == "1.6.0"

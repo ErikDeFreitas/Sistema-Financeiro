@@ -12,7 +12,7 @@ todos. Peça ao TI para entrar no grupo do sistema que precisa:
 - `SF-RoboAgregado`
 - `SF-Mesclador`
 - `SF-EnviadorPDFXML`
-- `SF-RenomeadorCTE`
+- `SF-RenomeadorCTE` (Renomeador de CT-e e Renomeador de XML)
 - `SF-Catraca`
 - `SF-Admin` (vê todos os sistemas)
 

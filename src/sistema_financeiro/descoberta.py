@@ -8,7 +8,8 @@ from importlib.metadata import EntryPoint, entry_points
 from tcm_ui.modulo import Modulo
 
 GRUPO_ENTRY_POINT = "sistema_financeiro.modulos"
-ORDEM = ("robo_agregado", "mesclador", "enviador_pdf_xml", "renomeador_cte", "sistema_catraca")
+ORDEM = ("robo_agregado", "mesclador", "enviador_pdf_xml", "renomeador_cte", "renomeador_xml",
+         "sistema_catraca")
 
 log = logging.getLogger("sistema_financeiro")
 

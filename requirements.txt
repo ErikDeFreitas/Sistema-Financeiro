@@ -3,5 +3,5 @@ tcm-ui[microsoft] @ git+https://github.com/ErikDeFreitas/Tcm-ui@v1.6.1
 robo-agregado @ git+https://github.com/ErikDeFreitas/Send_Agregados@v2.1.1
 mesclador @ git+https://github.com/ErikDeFreitas/pdf-merge@v3.0.0
 enviador-pdf-xml @ git+https://github.com/ErikDeFreitas/pdf-xml-mailer@v2.1.0
-renomeador-cte @ git+https://github.com/ErikDeFreitas/Renomeador_CTE@v2.0.1
+renomeador-cte @ git+https://github.com/ErikDeFreitas/Renomeador_CTE@v2.1.0
 sistema-catraca @ git+https://github.com/ErikDeFreitas/Projeto_Catraca@v2.0.1

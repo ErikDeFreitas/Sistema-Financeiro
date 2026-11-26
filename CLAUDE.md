@@ -29,6 +29,7 @@ lateral, com acesso por grupos do AD e cada sistema no seu próprio repositório
 | Mesclador de PDFs    | `pdf-merge`      | `mesclador`         | `SF-Mesclador`      |
 | Enviador de PDF + XML| `pdf-xml-mailer` | `enviador_pdf_xml`  | `SF-EnviadorPDFXML` |
 | Renomeador de CT-e   | `Renomeador_CTE` | `renomeador_cte`    | `SF-RenomeadorCTE`  |
+| Renomeador de XML    | `Renomeador_CTE` | `renomeador_xml`    | `SF-RenomeadorCTE`  |
 | Sistema Catraca      | `Projeto_Catraca`| `sistema_catraca`   | `SF-Catraca`        |
 
 Admin: grupo `SF-Admin`. Todos os grupos já existem no AD.
@@ -36,16 +37,18 @@ Admin: grupo `SF-Admin`. Todos os grupos já existem no AD.
 ## Versões atuais (lançadas em 26/11/2026)
 
 `Tcm-ui` v1.6.1 (tag), Releases `Send_Agregados` v2.1.1, `pdf-merge` v3.0.0, `pdf-xml-mailer`
-v2.1.0, `Renomeador_CTE` v2.0.1, `Projeto_Catraca` v2.0.1, `Sistema-Financeiro` v1.5.1.
+v2.1.0, `Renomeador_CTE` v2.1.0, `Projeto_Catraca` v2.0.1, `Sistema-Financeiro` v1.6.0.
 Os usuários recebem pela atualização automática (testada e funcionando).
 A 1.5.1 trouxe o refino pós-lançamento: no Renomeador, PDF com AES, fechamento e pasta digitada;
 no RoboAgregado, espera do e-mail atual ao fechar; no calendário do Tcm-ui, os dias da semana
 inteiros; e os READMEs.
+A 1.6.0 trouxe o Renomeador de XML (módulo `renomeador_xml` no `Renomeador_CTE` 2.1.0, mesmo
+grupo `SF-RenomeadorCTE`; a Release do `Renomeador_CTE` leva também o `RenomeadorXML.exe`).
 
 ## Como trabalhar
 
 - Testes: `.venv\Scripts\python -m pytest -q` em cada repositório. Última contagem: `Tcm-ui`
-  194, `Projeto_Catraca` 129, casca 51, `Renomeador_CTE` 67, `pdf-xml-mailer` 123,
+  194, `Projeto_Catraca` 129, casca 51, `Renomeador_CTE` 84, `pdf-xml-mailer` 123,
   `pdf-merge` 27, `Send_Agregados` 57.
 - Build: `powershell -NoProfile -ExecutionPolicy Bypass -File build.ps1`. Na casca, `-Local`
   instala os clones vizinhos (`../Tcm-ui`, `../Send_Agregados` etc.) com `--no-cache-dir`.

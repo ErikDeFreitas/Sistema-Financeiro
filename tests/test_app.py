@@ -57,13 +57,13 @@ def test_so_o_grupo_do_enviador_mostra_so_o_enviador(qtbot, configuracoes, monke
     assert jan.pagina_atual == ("enviador_pdf_xml", "enviar") and not jan.findChildren(CartaoErro)
 
 
-def test_so_o_grupo_do_renomeador_mostra_so_o_renomeador(qtbot, configuracoes, monkeypatch):
+def test_grupo_do_renomeador_mostra_os_dois_renomeadores(qtbot, configuracoes, monkeypatch):
     from sistema_financeiro.acesso import permitidos
 
     monkeypatch.setenv("SF_GRUPOS_DEV", "SF-RenomeadorCTE")
     grupos = app.grupos_do_usuario()
     modulos = carregar_modulos()
-    assert [m.id for m in permitidos(modulos, grupos)] == ["renomeador_cte"]
+    assert [m.id for m in permitidos(modulos, grupos)] == ["renomeador_cte", "renomeador_xml"]
     jan = criar_janela(modulos, grupos, "u", configuracoes)
     qtbot.addWidget(jan)
     assert jan.pagina_atual == ("renomeador_cte", "separar") and not jan.findChildren(CartaoErro)
@@ -139,7 +139,7 @@ class _Instancia:
 def test_verificar_modulos_ok(caplog):
     with caplog.at_level("INFO", logger="sistema_financeiro"):
         assert verificar_modulos() == 0
-    assert "robo_agregado, mesclador, enviador_pdf_xml, renomeador_cte, sistema_catraca" in caplog.text
+    assert "robo_agregado, mesclador, enviador_pdf_xml, renomeador_cte, renomeador_xml, sistema_catraca" in caplog.text
 
 
 def test_verificar_importacoes_inexistente_falha(monkeypatch, caplog):
